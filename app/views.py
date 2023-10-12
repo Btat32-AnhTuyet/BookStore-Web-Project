@@ -82,11 +82,14 @@ def search(request):
         order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
         cartItems = order.get_cart_items
+        user_not_login = "hidden;"
+        user_login = "visible;"
     else:
         items = []
         order = {'get_cart_items': 0, 'get_cart_total': 0}
         cartItems = order['get_cart_items']
-    
+        user_not_login = "visible;"
+        user_login = "hidden;"
     categories = Category.objects.filter(is_sub=False)
     active_category = request.GET.get('category', '')
     products = Product.objects.all()
@@ -97,7 +100,9 @@ def search(request):
         "searched": searched,
         "keys": keys,
         'products': products,
-        'cartItems': cartItems
+        'cartItems': cartItems,
+        'user_not_login': user_not_login,
+        'user_login': user_login
     }
     
     return render(request, 'app/search.html', context)
