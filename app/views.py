@@ -124,8 +124,10 @@ def loginPage(request):
             return redirect('home')
         else:
             messages.info(request, 'Username or password is incorrect!')
-
-    context = {'user_not_login': user_not_login, 'user_login': user_login}
+    categories = Category.objects.filter(is_sub=False)
+    active_category = request.GET.get('category', '')
+    products = Product.objects.all()
+    context = {'user_not_login': user_not_login, 'user_login': user_login,'categories': categories, 'active_category': active_category, 'products': products}
     return render(request, 'app/login.html', context)
 def logoutPage(request):
     logout(request)

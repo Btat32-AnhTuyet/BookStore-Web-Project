@@ -1,99 +1,210 @@
-body{
+body {
 	background-color: hsl(0, 0%, 98%);
 }
 
-h1,h2,h3,h4,h5,h6{
-	color:hsl(0, 0%, 30%);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	color: hsl(0, 0%, 30%);
 }
 
-.box-element{
-	box-shadow:hsl(0, 0%, 80%) 0 0 16px;
+.box-element {
+	box-shadow: hsl(0, 0%, 80%) 0 0 16px;
 	background-color: #fff;
 	border-radius: 4px;
 	padding: 5px;
 }
 
-.thumbnail{
+.thumbnail {
 	width: 350px;
-	height:200px;
-	-webkit-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
-    -moz-box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
-    box-shadow: -1px -3px 5px -2px rgba(214,214,214,1);
+	height: 200px;
+	-webkit-box-shadow: -1px -3px 5px -2px rgba(214, 214, 214, 1);
+	-moz-box-shadow: -1px -3px 5px -2px rgba(214, 214, 214, 1);
+	box-shadow: -1px -3px 5px -2px rgba(214, 214, 214, 1);
 }
 
-.product{
+.product {
 	border-radius: 0 0 4px 4px;
 }
 
-.bg-dark{
-	background-color: #4f868c!important;
+.bg-dark {
+	background-color: #4f868c !important;
 }
 
-#cart-icon{
-	width:25px;
+/* #cart-icon {
+	width: 25px;
 	display: inline-block;
 	margin-left: 15px;
 }
 
-#cart-total{
+#cart-total {
 	display: block;
 	text-align: center;
-	color:#fff;
+	color: #fff;
 	background-color: red;
 	width: 20px;
 	height: 25px;
 	border-radius: 50%;
 	font-size: 14px;
+} */
+#cart-container {
+	position: relative;
+	display: inline-block;
 }
 
-.col-lg-3, .col-lg-4, .col-lg-6, .col-lg-8, .col-lg-12{
+#cart-icon {
+	width: 40px;
+	display: inline-block;
+	margin-right: 15px;
+	vertical-align: middle;
+	/* Để đảm bảo icon được căn giữa theo chiều dọc */
+}
+
+#cart-total {
+	position: absolute;
+	top: -8px;
+	/* Điều chỉnh vị trí theo ý muốn */
+	right: -1px;
+	/* Điều chỉnh vị trí theo ý muốn */
+	text-align: center;
+	color: #fff;
+	background-color: red;
+	width: 20px;
+	height: 22px;
+	line-height: 25px;
+	/* Để đảm bảo số lượng được căn giữa trong khối tròn */
+	border-radius: 50%;
+	font-size: 14px;
+}
+
+.col-lg-3,
+.col-lg-4,
+.col-lg-6,
+.col-lg-8,
+.col-lg-12 {
 	margin-top: 10px;
 }
 
-.btn{
+.btn {
 	border-radius: 0;
 }
 
-.row-image{
+.row-image {
 	width: 100px;
 }
 
-.form-field{
-	width:250px;
+.form-field {
+	width: 250px;
 	display: inline-block;
 	padding: 5px;
 }
 
-.cart-row{
+.cart-row {
 	display: flex;
-    align-items: flex-stretch;
-    padding-bottom: 10px;
-    margin-bottom: 10px;
-    border-bottom: 1px solid #ececec;
+	align-items: flex-stretch;
+	padding-bottom: 10px;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ececec;
 
 }
 
-.quantity{
+.quantity {
 	display: inline-block;
 	font-weight: 700;
-	padding-right:10px;
-	
+	padding-right: 10px;
+
 
 }
 
-.chg-quantity{
+.chg-quantity {
 	width: 12px;
 	cursor: pointer;
 	display: block;
 	margin-top: 5px;
-	transition:.1s;
+	transition: .1s;
 }
 
-.chg-quantity:hover{
+.chg-quantity:hover {
 	opacity: .6;
 }
 
 
-.hidden{
-	display: none!important;
+.hidden {
+	display: none !important;
+}
+
+.increase-margin-left {
+	margin-left: 20px;
+	/* Điều chỉnh khoảng cách tùy ý */
+}
+
+.separator {
+	margin: 0 5px;
+	/* điều chỉnh khoảng cách trái/phải nếu cần */
+}
+
+.no-wrap {
+	white-space: nowrap;
+}
+
+body,
+html {
+	font-family: Arial, sans-serif;
+}
+
+.search-form {
+	display: flex;
+	align-items: center;
+	border: 1px solid rgb(221, 221, 227);
+	border-radius: 8px;
+	overflow: hidden;
+}
+
+.search-btn {
+	padding: 10px 12px;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+	border-radius: 5px 0 0 5px;
+	color: #0d6dfda0;
+
+	/* Bo góc tròn cho phía phải của nút */
+}
+
+.search-container {
+	display: flex;
+	justify-content: center;
+	width: 100%;
+}
+
+.search-btn:hover {
+	background-color: rgba(2, 117, 241, 0.56);
+	/* Nền xanh khi di chuyển chuột vào */
+}
+
+.search-input {
+	width: 100%;
+	display: flex;
+	position: relative;
+	border: 1px solid rgb(221, 221, 227);
+	border-radius: 8px;
+	-webkit-box-align: center;
+	align-items: center;
+}
+
+.search-input:focus {
+	outline: none;
+	box-shadow: none;
+
+	/* Màu nền trắng */
+}
+
+.search-form,
+.search-input,
+.search-btn {
+	background-color: #FFFFFF;
+	/* Bạn có thể thay đổi mã màu này theo mong muốn */
 }
