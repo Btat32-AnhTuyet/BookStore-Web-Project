@@ -1,0 +1,41 @@
+{% extends 'app/page.html' %}
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thông tin tài khoản</title>
+</head>
+<body>
+    {% block content %}
+    <div class="container mt-5">
+        <h2>Thông tin tài khoản</h2>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="mb-3">
+                    <strong>Username:</strong> {{ user.username }}
+                </div>
+                <div class="mb-3">
+                    <strong>Email:</strong> {{ user.email }}
+                </div>
+                <div class="mb-3">
+                    <strong>First Name:</strong> {{ user.first_name }}
+                </div>
+                <div class="mb-3">
+                    <strong>Last Name:</strong> {{ user.last_name }}
+                </div>
+                <!-- Bạn có thể thêm nhiều thông tin khác tại đây -->
+            </div>
+            <div class="col-md-6">
+                <!-- Nếu bạn muốn thêm hình ảnh hoặc các thông tin khác -->
+            </div>
+        </div>
+        <div class="mt-3">
+            <a href="{% url 'editprofile' %}" class="btn btn-primary">Chỉnh sửa thông tin</a>
+        </div>
+    </div>
+    {% endblock content %}
+</body>
+</html>

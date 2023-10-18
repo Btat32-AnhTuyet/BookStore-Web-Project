@@ -5,6 +5,8 @@ import json
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+
 
 
 #Create your views here.
@@ -48,7 +50,7 @@ def register(request):
     if request.method == "POST":
         form = CreateUserForm(request.POST)
         if form.is_valid():
-            form.save()
+            user = form.save()
             return redirect('login')
     context = {'form': form, 'user_not_login': user_not_login, 'user_login': user_login}
     return render(request, 'app/register.html', context)
@@ -129,6 +131,38 @@ def loginPage(request):
     products = Product.objects.all()
     context = {'user_not_login': user_not_login, 'user_login': user_login,'categories': categories, 'active_category': active_category, 'products': products}
     return render(request, 'app/login.html', context)
+
+@login_required
+def profile(request):
+    if request.user.is_authenticated:
+        return render(request, 'app/profile.html', {'user': request.user})
+    else:
+        # Trả về thông báo lỗi hoặc chuyển hướng đến trang đăng nhập
+        return redirect('login')
+
+@login_required
+def editprofile(request):
+    if request.method == 'POST':
+        # Lấy dữ liệu từ form
+        username = request.POST.get('username')
+        email = request.POST.get('email')
+        first_name = request.POST.get('first_name')
+        last_name = request.POST.get('last_name')
+        
+        # Cập nhật thông tin người dùng
+        user = request.user
+        user.username = username
+        user.email = email
+        user.first_name = first_name
+        user.last_name = last_name
+        user.save()
+        
+        # Hiển thị thông báo cho người dùng và chuyển hướng về trang hồ sơ
+        messages.success(request, 'Thông tin cá nhân đã được cập nhật thành công!')
+        return redirect('profile')
+    else:
+        return render(request, 'app/editprofile.html', {'user': request.user})
+
 def logoutPage(request):
     logout(request)
     return redirect('login')
@@ -174,6 +208,7 @@ def cart(request):
     context={'categories': categories, 'active_category': active_category ,'items':items, 'order':order,'cartItems' :cartItems, 'user_not_login': user_not_login, 'user_login': user_login}
     return render(request, 'app/cart.html', context)
 
+@login_required
 def checkout(request):
     if request.user.is_authenticated:
         customer = request.user
