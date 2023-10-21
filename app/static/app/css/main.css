@@ -13,7 +13,12 @@ h6 {
 
 .products-container {
 	display: flex;
+	flex-wrap: wrap;
+	gap: 2%;
 	width: 100%;
+	align-items: stretch;
+	padding-left: 50px;
+	padding-right: 20px;
 }
 
 .product-card {
@@ -22,26 +27,62 @@ h6 {
 	padding: 20px;
 	text-align: center;
 	margin-bottom: 20px;
-	width: 28%;
-	margin: 0 15px 30px;
+	flex-basis: calc(20% - 2%);
+	margin-top: 16px;
 	position: relative;
-	display: inline-block;
-	margin-left: 4%;
+	flex-direction: column;
+	display: flex;
+
 }
 
 .product-thumbnail {
 	width: 100%;
-	height: auto;
+	height: 200px;
+	margin-bottom: 10px;
+
 }
 
 .product-info {
-	padding: 10px 0;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	text-decoration: none !important;
+	height: 100%;
 }
 
-.product-info h5 {
-	min-height: 60px;
-	/* Hoặc giá trị khác phù hợp */
-	overflow: hidden;
+.product-info a.product-name,
+.product-info a.product-price {
+	text-decoration: none !important;
+	color: #111;
+}
+
+.product-name {
+	text-align: left;
+	margin-bottom: 10px;
+	font-size: 14px;
+}
+
+.product-price {
+	font-weight: bold;
+	font-size: 15px;
+	text-align: left;
+}
+
+.button-group {
+	text-align: center;
+	margin-top: 15px;
+	text-align: left;
+	border-color: #000;
+}
+
+/* Giả sử tên lớp của hai nút của bạn là add-btn và view-btn */
+.add-btn:hover,
+.btn-outline-success:hover {
+	background-color: #007BFF;
+	/* Màu vàng */
+	color: #000;
+	/* Màu chữ đen */
 }
 
 .product-label {
@@ -57,15 +98,6 @@ h6 {
 	font-size: 14px;
 }
 
-.product-price {
-	font-size: 20px;
-	font-weight: bold;
-	display: inline-block;
-}
-
-.button-group {
-	text-align: center;
-}
 
 .bg-dark {
 	background-color: #4f868c !important;

@@ -9,9 +9,9 @@
 <body>
     {% block search %}
     <h5> Result search for {{searched}} </h5> <br />
-    <div class="row" style="width:100%">
+    <div class="row products-container" style="width:100%">
       {%for product in keys %}
-        <div class="col-lg-3">
+        <div class="product-card">
             <img class="thumbnail" src="{{product.ImageURL}}">
             <div class="box-element product">
                 <h6><strong>{{product.name}}</strong></h6>

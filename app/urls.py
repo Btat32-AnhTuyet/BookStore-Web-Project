@@ -15,5 +15,5 @@ urlpatterns = [
     path('update_item/', views.updateItem, name="update_item"),
     path('profile/', views.profile, name='profile'),
     path('editprofile/', views.editprofile, name='editprofile'),
-    
+    path('path/to/create_paypal_transaction/', views.create_paypal_transaction, name='create_paypal_transaction'),
 ]

@@ -28,6 +28,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+PAYPAL_CLIENT_ID = 'AVLDQpu8QPJNfAATCK8GWgYxIzPkT3Dfp1mid_UO5TGwOBkMtD7esGAacVkPTSIKLLsxSLiAD3oSCTXO'
+PAYPAL_CLIENT_SECRET = 'ECBqN_26rggpJSeTG3YopfFvR8_DZUdL46Gh9qALWSVIaUVTZ0jmfxFN20aOOjBYmXbegCzix-1ePw5k'
+PAYPAL_API_URL = 'https://api-m.sandbox.paypal.com'
+PAYPAL_ENVIRONMENT = 'sandbox'
 
 # Application definition
 
@@ -39,7 +43,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'app',
-    'paypal.standard.ipn',
 ]
 
 MIDDLEWARE = [

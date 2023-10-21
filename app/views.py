@@ -6,8 +6,8 @@ from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import authenticate,login,logout
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-
-
+from .paypal import get_paypal_client
+from paypalcheckoutsdk.orders import OrdersCreateRequest
 
 #Create your views here.
 def detail(request):
@@ -54,25 +54,6 @@ def register(request):
             return redirect('login')
     context = {'form': form, 'user_not_login': user_not_login, 'user_login': user_login}
     return render(request, 'app/register.html', context)
-
-# def search(request):
-#     if request.method == "POST":
-#         searched = request.POST["searched"]
-#         keys = Product.objects.filter(name__contains = searched)
-#     if request.user.is_authenticated:
-#         customer = request.user
-#         order, created = Order.objects.get_or_create(customer =customer, complete =False)
-#         items = order.orderitem_set.all()
-#         cartItems= order.get_cart_items
-#     else:
-#         items =[]
-#         order ={'get_cart_items':0, 'get_cart_total' :0}
-#         cartItems= order['get_cart_items']
-#     categories = Category.objects.filter(is_sub = False)
-#     active_category = request.GET.get('category', '')
-#     products = Product.objects.all()
-#     context={'categories': categories, 'active_category': active_category }
-#     return render(request, 'app/search.html', {"searched": searched, "keys" : keys, 'products': products, 'cartItems' :cartItems})
 
 def search(request):
     if request.method == "POST":
@@ -225,6 +206,51 @@ def checkout(request):
         user_login = "hidden;"
     context={'items':items, 'order':order,'cartItems' :cartItems, 'user_not_login': user_not_login, 'user_login': user_login}
     return render(request, 'app/checkout.html', context)
+
+def PaymentSuccsessful(request):
+    data = json.loads(request.body)
+    productId = data['productId']
+    product = Product.objects.get(id = productId)
+    context={'product' : product}
+    return render(request, 'payment-succsess.html', context)
+
+def paymentFailed(request):
+    data = json.loads(request.body)
+    productId = data['productId']
+    product = Product.objects.get(id = productId)
+    context={'product' : product}
+    return render(request, 'paymentFailed.html', context)
+
+
+def create_paypal_transaction(request):
+    # Dữ liệu đơn hàng sẽ được lấy từ request, ở đây chúng ta sử dụng dữ liệu cứng cho mục đích minh họa
+    order_data = {
+        "intent": "CAPTURE",
+        "purchase_units": [
+            {
+                "amount": {
+                    "currency_code": "USD",
+                    "value": "100.00"  # Cập nhật số tiền dựa trên đơn hàng của bạn
+                }
+            }
+        ]
+    }
+
+    client = get_paypal_client()
+    request = OrdersCreateRequest()
+    request.prefer('return=representation')
+    request.request_body(order_data)
+    
+    try:
+        response = client.execute(request)
+        # Lấy thông tin giao dịch, ví dụ: ID đơn hàng, để sử dụng trong các bước tiếp theo
+        order_id = response.result.id
+        # Trả về thông tin cần thiết cho frontend
+        return JsonResponse({'orderID': order_id})
+    except IOError as ioe:
+        # Xử lý lỗi ở đây
+        return JsonResponse({'error': str(ioe)}, status=500)
+
 def updateItem(request):
     data = json.loads(request.body)
     productId = data['productId']
