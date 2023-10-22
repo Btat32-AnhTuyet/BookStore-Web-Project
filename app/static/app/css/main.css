@@ -250,6 +250,15 @@ html {
 	background-color: #FFFFFF;
 }
 
+.paypal-button {
+	padding: 10px 12px;
+	border: none;
+	cursor: pointer;
+	font-size: 16px;
+	border-radius: 5px 0 0 5px;
+	color: #0d6dfda0;
+}
+
 .user-container {
 	position: relative;
 	z-index: 2;
