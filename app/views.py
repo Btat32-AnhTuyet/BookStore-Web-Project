@@ -35,9 +35,18 @@ def detail(request):
 def category(request):
     categories = Category.objects.filter(is_sub = False)
     active_category = request.GET.get('category', '')
+    if request.user.is_authenticated:
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer =customer, complete =False)
+        items = order.orderitem_set.all()
+        cartItems= order.get_cart_items
+    else:
+        items =[]
+        order ={'get_cart_items':0, 'get_cart_total' :0}
+        cartItems= order['get_cart_items']
     if active_category:
         products = Product.objects.filter(category__slug= active_category)
-    context = {'categories': categories, 'products': products, 'active_category': active_category}
+    context = {'categories': categories, 'products': products, 'active_category': active_category, 'items':items, 'order':order,'cartItems' :cartItems}
     return render(request, 'app/category.html', context)
 
 def register(request):
@@ -117,19 +126,28 @@ def loginPage(request):
 @login_required
 def profile(request):
     if request.user.is_authenticated:
-        return render(request, 'app/profile.html', {'user': request.user})
+        customer = request.user
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
+        items = order.orderitem_set.all()
+        cartItems = order.get_cart_items  # Đảm bảo rằng phương thức này tồn tại và trả về số lượng mong muốn
+        context = {'items': items, 'order': order, 'cartItems': cartItems}
+        return render(request, 'app/profile.html', context)
     else:
         return redirect('login')
 
 @login_required
 def editprofile(request):
+    user = request.user
+    order, created = Order.objects.get_or_create(customer=user, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items
+    context = {'items':items, 'order':order,'cartItems' :cartItems}
     if request.method == 'POST':
         # Lấy dữ liệu từ form
         username = request.POST.get('username')
         email = request.POST.get('email')
         first_name = request.POST.get('first_name')
         last_name = request.POST.get('last_name')
-        
         # Cập nhật thông tin người dùng
         user = request.user
         user.username = username
@@ -137,12 +155,11 @@ def editprofile(request):
         user.first_name = first_name
         user.last_name = last_name
         user.save()
-        
         # Hiển thị thông báo cho người dùng và chuyển hướng về trang hồ sơ
         messages.success(request, 'Thông tin cá nhân đã được cập nhật thành công!')
         return redirect('profile')
     else:
-        return render(request, 'app/editprofile.html', {'user': request.user})
+        return render(request, 'app/editprofile.html', context)
 
 def logoutPage(request):
     logout(request)
@@ -284,3 +301,11 @@ def convert_to_usd(local_amount):
     rate = data['rates']['VND']
     usd_amount = local_amount / rate
     return usd_amount
+
+def payment_success(request):
+    user = request.user
+    order, created = Order.objects.get_or_create(customer=user, complete=False)
+    items = order.orderitem_set.all()
+    cartItems = order.get_cart_items
+    context = {'items':items, 'order':order,'cartItems' :cartItems}
+    return render(request, 'app/payment_success.html', context)

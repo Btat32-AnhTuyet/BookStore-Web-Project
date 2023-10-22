@@ -16,7 +16,11 @@
 					<th><h5>Items: <strong>{{order.get_cart_items}}</strong></h5></th>
 					<th><h5>Total:<strong>{{order.get_cart_total}}</strong></h5></th>
 					<th>
-						<a  style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
+						{% if order.get_cart_total > 0 %}
+                    		<a style="float:right; margin:5px;" class="btn btn-success" href="{% url 'checkout' %}">Checkout</a>
+                		{% else %}
+                    		<span style="float:right; margin:5px;">Your cart is empty</span>
+                		{% endif %}
 					</th>
 				</tr>
 			</table>
@@ -36,7 +40,7 @@
 			<div class="cart-row">
 				<div style="flex:2"><img class="row-image" src="{{item.product.ImageURL}}"></div>
 				<div style="flex:2"><p>{{item.product.name}}</p></div>
-				<div style="flex:1"><p>{{item.product.price}}</p></div>
+				<div style="flex:1"><p>{{item.product.formatted_price}}</p></div>
 				<div style="flex:1">
 					<p class="quantity">{{item.quantity}}</p>
 					<div class="quantity">
@@ -45,7 +49,7 @@
 						<img data-product= {{item.product.id}} data-action = 'remove' class="chg-quantity update-cart" src="{% static  'app/images/arrow-down.png' %}">
 					</div>
 				</div>
-				<div style="flex:1"><p>$32</p></div>
+				<div style="flex:1"><p></p></div>
 			</div>
         	{% endfor%}
 		</div>

@@ -1,0 +1,28 @@
+{% extends 'app/page.html' %}
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment successful</title>
+</head>
+<body>
+    {% block payment_success %}
+        <div class="payment-success-container">
+            <h1 class="payment-success-header">Thanh toán thành công!</h1>
+            <p class="payment-success-text">Cảm ơn quý khách đã đặt hàng!<br>
+                Chúng tôi rất trân trọng sự tin tưởng và ủng hộ của quý khách.<br>
+                Đơn hàng của quý khách đã được xử lý và sẽ được giao đến trong thời gian sớm nhất.<br>
+                Chúc quý khách có những trải nghiệm mua sắm thú vị và hẹn gặp lại trong những lần mua sắm sau!</p>
+            <a class="return-to-homepage-button" href="{% url 'home' %}">TIẾP TỤC MUA SẮM</a>
+        </div>
+    <style>
+        body {
+            padding: 10px;
+            box-sizing: border-box;
+            text-align: center;
+        }
+    </style>
+    {% endblock payment_success %}
+</body>
+</html>
