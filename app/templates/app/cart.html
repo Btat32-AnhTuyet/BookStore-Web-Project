@@ -1,6 +1,8 @@
 {% extends 'app/page.html' %}
 {% load static %}
 {% block cart_content %}
+
+{% if user_login == "visible;" %}
 <div class="row" style= "width: 100%">
 	<div class="col-lg-12">
 		<div class="box-element">
@@ -49,4 +51,14 @@
 		</div>
 	</div>
 </div>
+{% else %}
+<div class="row" style= "width: 100%">
+    <div class="col-lg-12">
+        <div class="box-element">
+            <h4>Please log in to view your cart.</h4>
+        </div>
+    </div>
+</div>
+
+{% endif %}
 {% endblock cart_content %}

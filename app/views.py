@@ -8,6 +8,7 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .paypal import get_paypal_client
 from paypalcheckoutsdk.orders import OrdersCreateRequest
+import requests
 
 #Create your views here.
 def detail(request):
@@ -118,7 +119,6 @@ def profile(request):
     if request.user.is_authenticated:
         return render(request, 'app/profile.html', {'user': request.user})
     else:
-        # Trả về thông báo lỗi hoặc chuyển hướng đến trang đăng nhập
         return redirect('login')
 
 @login_required
@@ -171,6 +171,8 @@ def home(request):
     return render(request, 'app/home.html', context)
 
 def cart(request):
+    current_path = request.path
+    on_auth_page = current_path in ['/login', '/register']
     if request.user.is_authenticated:
         customer = request.user
         order, created = Order.objects.get_or_create(customer =customer, complete =False)
@@ -178,6 +180,9 @@ def cart(request):
         cartItems= order.get_cart_items
         user_not_login = "hidden;"
         user_login = "visible;"
+    elif on_auth_page:
+        user_not_login = "hidden;"
+        user_login = "hidden;"
     else:
         items =[]
         order ={'get_cart_items':0, 'get_cart_total' :0}
@@ -221,36 +226,6 @@ def paymentFailed(request):
     context={'product' : product}
     return render(request, 'paymentFailed.html', context)
 
-
-def create_paypal_transaction(request):
-    # Dữ liệu đơn hàng sẽ được lấy từ request, ở đây chúng ta sử dụng dữ liệu cứng cho mục đích minh họa
-    order_data = {
-        "intent": "CAPTURE",
-        "purchase_units": [
-            {
-                "amount": {
-                    "currency_code": "USD",
-                    "value": "100.00"  # Cập nhật số tiền dựa trên đơn hàng của bạn
-                }
-            }
-        ]
-    }
-
-    client = get_paypal_client()
-    request = OrdersCreateRequest()
-    request.prefer('return=representation')
-    request.request_body(order_data)
-    
-    try:
-        response = client.execute(request)
-        # Lấy thông tin giao dịch, ví dụ: ID đơn hàng, để sử dụng trong các bước tiếp theo
-        order_id = response.result.id
-        # Trả về thông tin cần thiết cho frontend
-        return JsonResponse({'orderID': order_id})
-    except IOError as ioe:
-        # Xử lý lỗi ở đây
-        return JsonResponse({'error': str(ioe)}, status=500)
-
 def updateItem(request):
     data = json.loads(request.body)
     productId = data['productId']
@@ -267,3 +242,45 @@ def updateItem(request):
     if orderItem.quantity <= 0:
         orderItem.delete()
     return JsonResponse('added', safe=False)
+
+def create_paypal_transaction(request):
+    data = json.loads(request.body)
+    order_id = data.get('orderID')
+    tx_id = data.get('txID')
+
+    order = Order.objects.get(id=order_id)
+    order.complete = True
+    order.transaction_id = tx_id
+    order.save()
+
+    formatted_total_amount = "{:.2f}".format(convert_to_usd(order.get_cart_total))
+    order_data = {
+        "intent": "CAPTURE",
+        "purchase_units": [
+            {
+                "amount": {
+                    "currency_code": "USD",
+                    "value": formatted_total_amount
+                }
+            }
+        ]
+    }
+
+    client = get_paypal_client()
+    request = OrdersCreateRequest()
+    request.prefer('return=representation')
+    request.request_body(order_data)
+
+    try:
+        response = client.execute(request)
+        order_id = response.result.id
+        return JsonResponse({'orderID': order_id})
+    except IOError as ioe:
+        return JsonResponse({'error': str(ioe)}, status=500)
+
+def convert_to_usd(local_amount):
+    response = requests.get('https://api.exchangerate-api.com/v4/latest/USD')  # từ VND sang USD
+    data = response.json()
+    rate = data['rates']['VND']
+    usd_amount = local_amount / rate
+    return usd_amount

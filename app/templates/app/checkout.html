@@ -43,44 +43,52 @@
 			<br>
 
 			<script src="https://www.paypal.com/sdk/js?client-id=AVLDQpu8QPJNfAATCK8GWgYxIzPkT3Dfp1mid_UO5TGwOBkMtD7esGAacVkPTSIKLLsxSLiAD3oSCTXO&currency=USD"></script>
-			<div id="paypal-button-container"></div>
-				<script>
-					function getCookie(name) {
-						let cookieValue = null;
-						if (document.cookie && document.cookie !== '') {
-							const cookies = document.cookie.split(';');
-							for (let i = 0; i < cookies.length; i++) {
-								const cookie = cookies[i].trim();
-								// Does this cookie string begin with the name we want?
-								if (cookie.substring(0, name.length + 1) === (name + '=')) {
-									cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-									break;
-								}
+            <div id="paypal-button-container"></div>
+
+            <script>
+				function getCookie(name) {
+					let cookieValue = null;
+					if (document.cookie && document.cookie !== '') {
+						const cookies = document.cookie.split(';');
+						for (let i = 0; i < cookies.length; i++) {
+							const cookie = cookies[i].trim();
+							if (cookie.substring(0, name.length + 1) === (name + '=')) {
+								cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+								break;
 							}
 						}
-						return cookieValue;
 					}
-
-					paypal.Buttons({
-						createOrder: function(data, actions) {
-							return fetch('/path/to/create_paypal_transaction/', {
-								method: 'post',
-								headers: {
-									'Content-Type': 'application/json',
-									// Thêm CSRF token vào header của yêu cầu
-									'X-CSRFToken': getCookie('csrftoken')
-								},
-								body: JSON.stringify({
-									// Dữ liệu bạn muốn gửi đi, nếu có
-								})
-							}).then(function(res) {
-								return res.json();
-							}).then(function(data) {
-								return data.orderID; // Sử dụng ID đơn hàng từ response đã nhận
-							});
-						},
-					}).render('#paypal-button-container'); // Hiển thị nút PayPal
-				</script>
+					return cookieValue;
+				}
+				const orderId = "{{ order.id }}";
+				paypal.Buttons({
+					createOrder: function(data, actions) {
+						return fetch('/path/to/create_paypal_transaction/', {
+							method: 'post',
+							headers: {
+								'Content-Type': 'application/json',
+								'X-CSRFToken': getCookie('csrftoken')
+							},
+							body: JSON.stringify({
+								orderID: orderId,
+								txID: data.orderID
+							})
+						}).then(function(res) {
+							return res.json();
+						}).then(function(data) {
+							return data.orderID; // Sử dụng ID đơn hàng từ response đã nhận
+						});
+					},
+					onApprove: function(data, actions) {
+						// Đây là chỗ bạn xử lý sau khi thanh toán được chấp thuận.
+						// Bạn có thể gọi đến một endpoint khác trên server của bạn
+						// để xác nhận giao dịch hoặc thông báo cho người dùng.
+					},
+					onError: function(err) {
+						console.error(err);
+					}
+				}).render('#paypal-button-container');
+			</script>
 			</div>
 
 		<div class="col-lg-6">
