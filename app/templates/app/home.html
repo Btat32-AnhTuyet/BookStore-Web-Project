@@ -1,7 +1,10 @@
 {% extends 'app/page.html' %}
 {% load static %}
 {% block banner_slider %}
-<div id="carouselExampleDark" class="carousel carousel-dark slide">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.1.3/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+
+<div id="carouselExampleDark" class="carousel carousel-dark slide" data-bs-ride="carousel">
     <div class="carousel-indicators">
       <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
       <button type="button" data-bs-target="#carouselExampleDark" data-bs-slide-to="1" aria-label="Slide 2"></button>
@@ -10,33 +13,18 @@
 
     </div>
     <div class="carousel-inner">
-      <div class="carousel-item active" data-bs-interval="10000">
+      <div class="carousel-item active" data-bs-interval="5000">
         <img src="{% static 'app/images/banner/b1.jpg' %}" class="d-block w-100" alt="Sách hay tặng bạn">
-        <div class="carousel-caption d-none d-md-block bg-success text-white">
-          <h5>Khuyến mãi tháng 3</h5>
-          <p>Nhà sách Phương NamS</p>
-        </div>
+        
       </div>
-      <div class="carousel-item" data-bs-interval="2000">
+      <div class="carousel-item" data-bs-interval="5000">
         <img src="{% static 'app/images/banner/b2.jpg' %}" class="d-block w-100" alt="Sách mới">
-        <div class="carousel-caption d-none d-md-block bg-success text-white">
-          <h5>Sách mới</h5>
-          <p>Some representative placeholder content for the second slide.</p>
-        </div>
       </div>
-      <div class="carousel-item">
+      <div class="carousel-item" data-bs-interval="5000">
         <img src="{% static 'app/images/banner/b3.jpg' %}" class="d-block w-100" alt="Khuyến mãi lên đến 40%">
-        <div class="carousel-caption d-none d-md-block bg-success text-white">
-          <h5>Khuyến mãi lên đến 40%</h5>
-          <p>Sản phẩm 40 năm - Thiên Long Shop</p>
-        </div>
       </div>
-      <div class="carousel-item">
+      <div class="carousel-item" data-bs-interval="5000">
         <img src="{% static 'app/images/banner/b4.jpg' %}" class="d-block w-100" alt="Ưu đãi cực sốc">
-        <div class="carousel-caption d-none d-md-block bg-success text-white">
-          <h5>Ưu đãi cực sốc</h5>
-          <p>Mua hàng giá gốc</p>
-        </div>
       </div>
     </div>
     <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleDark" data-bs-slide="prev">
@@ -47,9 +35,12 @@
       <span class="carousel-control-next-icon" aria-hidden="true"></span>
       <span class="visually-hidden">Next</span>
     </button>
-  </div>
+  </div>  
 {%endblock banner_slider %}
 {% block main-content %}
+<div class="headline">
+  <h3>Sản phẩm bán chạy</h3>
+</div>
 <div class="row products-container">
   {%for product in products%}
     <div class="product-card">

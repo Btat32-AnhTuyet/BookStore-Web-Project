@@ -190,25 +190,43 @@ def home(request):
 def cart(request):
     current_path = request.path
     on_auth_page = current_path in ['/login', '/register']
+    
+    # Initialize default values
+    items = []
+    order = {'get_cart_items': 0, 'get_cart_total': 0}
+    cartItems = 0
+    user_not_login = "visible;"
+    user_login = "hidden;"
+    
+    # For authenticated users
     if request.user.is_authenticated:
         customer = request.user
-        order, created = Order.objects.get_or_create(customer =customer, complete =False)
+        order, created = Order.objects.get_or_create(customer=customer, complete=False)
         items = order.orderitem_set.all()
-        cartItems= order.get_cart_items
+        
+        # I'm assuming get_cart_items and get_cart_total are either properties or methods of the Order model.
+        cartItems = order.get_cart_items  
         user_not_login = "hidden;"
         user_login = "visible;"
+    
+    # For authentication pages
     elif on_auth_page:
         user_not_login = "hidden;"
         user_login = "hidden;"
-    else:
-        items =[]
-        order ={'get_cart_items':0, 'get_cart_total' :0}
-        cartItems= order['get_cart_items']
-        user_not_login = "visible;"
-        user_login = "hidden;"
-    categories = Category.objects.filter(is_sub = False)
+    categories = Category.objects.filter(is_sub=False)
     active_category = request.GET.get('category', '')
-    context={'categories': categories, 'active_category': active_category ,'items':items, 'order':order,'cartItems' :cartItems, 'user_not_login': user_not_login, 'user_login': user_login}
+    
+    context = {
+        'categories': categories,
+        'active_category': active_category,
+        'items': items,
+        'order': order,
+        'cartItems': cartItems,
+        'user_not_login': user_not_login,
+        'user_login': user_login,
+        'items': items,
+    }
+    
     return render(request, 'app/cart.html', context)
 
 @login_required

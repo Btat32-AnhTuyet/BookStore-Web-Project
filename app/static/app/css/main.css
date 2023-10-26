@@ -250,14 +250,23 @@ html {
 	background-color: #FFFFFF;
 }
 
+#paypal-button-container iframe {
+	width: 80% !important;
+	height: 40px !important;
+}
+
 .paypal-button {
-	padding: 10px 12px;
+	padding: 5px 10px;
 	border: none;
 	cursor: pointer;
 	font-size: 16px;
 	border-radius: 5px 0 0 5px;
-	color: #0d6dfda0;
 }
+
+/* .payment {
+	width: 10%;
+	height: 20px;
+} */
 
 .user-container {
 	position: relative;
@@ -308,4 +317,33 @@ html {
 
 .user-name:hover a {
 	display: inline;
+}
+
+.headline {
+	display: flex;
+	justify-content: center;
+	/* Căn giữa nội dung theo chiều ngang */
+	align-items: center;
+	/* Căn giữa nội dung theo chiều dọc */
+	background-color: #ffffff;
+	/* Màu nền trắng */
+	padding: 20px 0;
+	/* Khoảng cách trên và dưới tiêu đề */
+	box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+	/* Bóng dưới tiêu đề */
+	position: relative;
+	/* Đặt vị trí tương đối để tạo viền dưới tiêu đề */
+}
+
+.headline h3 {
+	font-size: 24px;
+	/* Cỡ chữ */
+	font-weight: bold;
+	/* Đặc chữ */
+	margin: 0;
+	/* Xóa lề mặc định */
+	color: #333;
+	/* Màu chữ tối */
+	text-transform: uppercase;
+	/* Chữ in hoa */
 }

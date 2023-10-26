@@ -41,11 +41,27 @@
 			</div>
 
 			<br>
+		</div>
 
-			<script src="https://www.paypal.com/sdk/js?client-id=AVLDQpu8QPJNfAATCK8GWgYxIzPkT3Dfp1mid_UO5TGwOBkMtD7esGAacVkPTSIKLLsxSLiAD3oSCTXO&currency=USD"></script>
-            <div id="paypal-button-container" class="paypal-button"></div>
-
-            <script>
+		<div class="col-lg-6">
+			<div class="box-element">
+				<a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
+				<hr>
+				<h3>Order Summary</h3>
+				<hr>
+				{% for item in items %}
+				<div class="cart-row">
+					<div style="flex:2"><img class="row-image" src="{{item.product.ImageURL}}"></div>
+					<div style="flex:2"><p>{{item.product.name}}</p></div>
+					<div style="flex:1"><p>{{item.product.formatted_price}}</p></div>
+					<div style="flex:1"><p>{{item.quantity}}</p></div>
+				</div>
+				{% endfor%}
+				<h5>Số lượng:   {{order.get_cart_items}}</h5>
+				<h5>Tổng thanh toán:   {{order.get_cart_total_formatted}}</h5>
+				<script src="https://www.paypal.com/sdk/js?client-id=AVLDQpu8QPJNfAATCK8GWgYxIzPkT3Dfp1mid_UO5TGwOBkMtD7esGAacVkPTSIKLLsxSLiAD3oSCTXO&currency=USD&version=5.0.0"></script>
+            <div id="paypal-button-container" class="paypal-button" style="width: 40%; margin-top: 20px; margin-bottom: 11%"></div>
+			<script>
 				function getCookie(name) {
 					let cookieValue = null;
 					if (document.cookie && document.cookie !== '') {
@@ -62,6 +78,12 @@
 				}
 				const orderId = "{{ order.id }}";
 				paypal.Buttons({
+					style: {
+						layout: 'vertical',  // Định dạng: vertical hoặc horizontal
+						size: 'small',       // Kích thước: small, medium, large, responsive
+						shape: 'rect',       // Hình dạng: rect hoặc pill
+						color: 'gold'        // Màu sắc: gold, blue, silver, white, black
+					},
 					createOrder: function(data, actions) {
 						return fetch('/path/to/create_paypal_transaction/', {
 							method: 'post',
@@ -90,24 +112,6 @@
 					}
 				}).render('#paypal-button-container');
 			</script>
-			</div>
-
-		<div class="col-lg-6">
-			<div class="box-element">
-				<a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
-				<hr>
-				<h3>Order Summary</h3>
-				<hr>
-				{% for item in items %}
-				<div class="cart-row">
-					<div style="flex:2"><img class="row-image" src="{{item.product.ImageURL}}"></div>
-					<div style="flex:2"><p>{{item.product.name}}</p></div>
-					<div style="flex:1"><p>{{item.product.formatted_price}}</p></div>
-					<div style="flex:1"><p>{{item.quantity}}</p></div>
-				</div>
-				{% endfor%}
-				<h5>Số lượng:   {{order.get_cart_items}}</h5>
-				<h5>Tổng thanh toán:   {{order.get_cart_total}}</h5>
 			</div>
 		</div>
 	</div>
